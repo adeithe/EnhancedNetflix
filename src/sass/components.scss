@@ -1,0 +1,129 @@
+#enhanced-netflix {
+	fieldset {
+		background-color: transparent;
+		border: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	legend {
+		color: inherit;
+		display: table;
+		max-width: 100%;
+		white-space: normal;
+		font-weight: 600;
+		margin-bottom: 0.375em;
+	}
+
+	.alt-text { color: rgba(255, 255, 255, 0.7); }
+
+	*:focus { outline: none; }
+
+	.form-textfield {
+		border: 0;
+		margin: 0;
+		display: inline-flex;
+		padding: 0;
+		position: relative;
+		min-width: 0;
+		flex-direction: column;
+		vertical-align: top;
+
+		.form-input-base {
+			position: relative;
+			color: #fff;
+			cursor: text;
+			display: inline-flex;
+			font-size: 1rem;
+			box-sizing: border-box;
+			align-items: center;
+			line-height: 1.1875em;
+
+			.form-input-outlined {
+				flex: 1;
+				font: inherit;
+				color: currentColor;
+				width: 100%;
+				border: 0;
+				height: 1.1875em;
+				margin: 0;
+				padding: 18.5px 14px;
+				display: block;
+				min-width: 0;
+				background: none;
+				box-sizing: content-box;
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			.form-input-outline {
+				border-color: rgba(255, 255, 255, 0.23);
+				top: -5px;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				transition: padding-left 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms, border-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms, border-width 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+				border-style: solid;
+				border-width: 1px;
+				border-radius: 4px;
+				pointer-events: none;
+
+				> legend {
+					padding: 0;
+					text-align: left;
+					transition: width 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+					line-height: 11px;
+				}
+			}
+
+			&:focus-within {
+				.form-input-outline {
+					border-color: #B388FF!important;
+					border-width: 2px!important;
+				}
+			}
+		}
+	}
+
+	div.grid-container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		box-sizing: border-box;
+		width: 100%;
+	
+		> div.grid-item {
+			margin: 0;
+			box-sizing: border-box;
+			padding: 0.75rem;
+		}
+	
+		@media(min-width: 960px) {
+			div.grid-md-12 {
+				flex-grow: 0;
+				max-width: 100%;
+				flex-basis: 100%;
+			}
+	
+			div.grid-md-9 {
+				flex-grow: 0;
+				max-width: 75%;
+				flex-basis: 75%;
+			}
+	
+			div.grid-md-6 {
+				flex-grow: 0;
+				max-width: 50%;
+				flex-basis: 50%;
+			}
+	
+			div.grid-md-3 {
+				flex-grow: 0;
+				max-width: 25%;
+				flex-basis: 25%;
+			}
+		}
+	}
+}

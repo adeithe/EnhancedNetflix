@@ -1,0 +1,25 @@
+{
+	"manifest_version": 2,
+	"name": "EnhancedNetflix",
+	"short_name": "EN",
+	"description": "A better way to watch.",
+	"version": "0.1.1",
+	"author": "Adeithe",
+	"homepage_url": "https://adeithe.dev/netflix",
+	"icons": {
+		"16": "icons/16.png",
+		"48": "icons/48.png",
+		"128": "icons/128.png"
+	},
+	"content_scripts": [{
+		"matches": ["*://www.netflix.com/browse", "*://www.netflix.com/watch*", "*://www.netflix.com/title*"],
+		"js": ["content_script.js"]
+	}],
+	"web_accessible_resources": ["enhancement.js", "enhancement.css"],
+	"permissions": [
+		"*://*.netflix.com/*",
+		"*://*.adeithe.dev/*"
+	],
+	"default_locale": "en",
+	"offline_enabled": false
+}
