@@ -130,7 +130,7 @@ export class PubSub {
 		const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		for(let i = 0; i < 16; i++)
 			nonce += possible.charAt(Math.floor(Math.random() * possible.length));
-		if(Array.from(this.__topics, o => o.topic).includes(nonce))
+		if(Array.from(this.__topics, o => o.nonce).includes(nonce))
 			return await this.getNewNonce();
 		return nonce;
 	}

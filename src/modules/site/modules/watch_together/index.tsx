@@ -83,8 +83,8 @@ class WatchTogether extends PageModule {
 						if(this.__manager.getTitle() !== this.__api.room.title) {
 							window.location.href = this.__api.getRoomURL();
 							return;
-						} else if(!this.isInitialized)
-							new NetflixRoom(this.__api).handle(this.__api.room, [this.__api.room.roomId]);
+						} //else if(!this.isInitialized)
+							//new NetflixRoom(this.__api).handle(this.__api.room, [this.__api.room.roomId]);
 					}
 					if(!this.isUpdating) {
 						this.isUpdating = true;

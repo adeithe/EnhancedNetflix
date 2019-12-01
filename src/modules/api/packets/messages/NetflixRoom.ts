@@ -17,7 +17,12 @@ export class NetflixRoom extends MessageHandler {
 		let timeRemaining = this.api.room.timeRemaining;
 		if(!this.api.room.isPaused)
 			timeRemaining -= (Moment.utc().valueOf() - this.api.room.updatedAt);
-		NetflixPlayer.seek(timeRemaining, true);
+		let difference = NetflixPlayer.getTimeRemaining() - timeRemaining;
+		if(difference < 0) difference = -difference;
+		if(difference > 1000) {
+			this.api.getCore().getLogger().get('player').warn(`Player appears too be out of sync with room host by ${difference}ms`);
+			NetflixPlayer.seek(timeRemaining, true);
+		}
 	}
 }
 
