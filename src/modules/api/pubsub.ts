@@ -11,7 +11,7 @@ export interface Topic {
 }
 
 export class PubSub {
-	public static IP: string = 'pubsub.adeithe.dev';
+	public static IP: string = 'api.adeithe.dev/pubsub';
 
 	private __api: API;
 	private __logger: Logger;
