@@ -78,7 +78,8 @@ export class API extends Module {
 	}
 
 	async updateRoom(data?: IRoomControllable): Promise<IRoom> {
-		if(!this.__room) return null;
+		if(!this.__room || !this.__room.token) return null;
+		if(!this.__pubsub.isConnected) await this.__pubsub.connect();
 		const req = await this.call(`rooms/${this.__room.roomId}`, Method.PATCH, data);
 		if(req.status !== 200 && req.status !== 202 && req.status !== 204)
 			return null;
@@ -89,6 +90,7 @@ export class API extends Module {
 
 	async pingRoom(): Promise<boolean> {
 		if(!this.__room) return false;
+		if(!this.__pubsub.isConnected) await this.__pubsub.connect();
 		const req = await this.call(`rooms/${this.__room.roomId}`, Method.GET);
 		if(req.status !== 200 && req.status !== 202 && req.status !== 204)
 			return false;

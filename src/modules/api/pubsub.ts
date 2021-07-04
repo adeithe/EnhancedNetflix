@@ -30,7 +30,7 @@ export class PubSub {
 	}
 
 	get topics(): string[] { return Array.from(this.__topics, o => o.topic); }
-	get isConnected(): boolean { return !!this.__socket; }
+	get isConnected(): boolean { return !!this.__socket && this.__socket.readyState == WebSocket.OPEN; }
 	get latency(): number { return Packets.default.PongPacket.ping; }
 
 	getTopicsByNonce(nonce?: string) {
@@ -48,7 +48,7 @@ export class PubSub {
 				topic
 			});
 		if(!this.isConnected)
-			return this.connect();
+			return await this.connect();
 		for(const k in this.__topics) {
 			const t = this.__topics[k];
 			if(t.topic === topic) {
@@ -74,27 +74,30 @@ export class PubSub {
 	}
 
 	async ping(): Promise<void> {
-		if(this.__socket) {
-			const nonce = await this.getNewNonce();
-			Packets.default.PongPacket.nonce = nonce;
-			this.__socket.send(JSON.stringify({ type: "PING", nonce }));
-			if(!this.isPingSet) {
-				this.isPingSet = true;
-				setTimeout(() => {
-					this.isPingSet = false;
-					this.ping();
-				}, (300000 - (Math.floor(Math.random() * 7500) + 1000)));
-			}
+		if(!this.isConnected) await this.connect();
+		const nonce = await this.getNewNonce();
+		Packets.default.PongPacket.nonce = nonce;
+		this.__socket.send(JSON.stringify({ type: "PING", nonce }));
+		if(!this.isPingSet) {
+			this.isPingSet = true;
+			setTimeout(() => {
+				this.isPingSet = false;
+				this.ping();
+			}, (300000 - (Math.floor(Math.random() * 7500) + 1000)));
 		}
 	}
 
-	close() { this.__socket.close(); }
+	close() { if(this.isConnected) this.__socket.close(); }
 
-	connect() {
-		this.__socket = new WebSocket(`wss://${PubSub.IP}`);
-		this.__socket.onopen = (e) => this.onOpen(e);
-		this.__socket.onmessage = (e) => this.onMessage(e);
-		this.__socket.onclose = (e) => this.onClose(e);
+	connect(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.__socket = new WebSocket(`wss://${PubSub.IP}`);
+			this.__api.once(":connect", () => resolve());
+			this.__socket.onopen = (e) => this.onOpen(e);
+			this.__socket.onmessage = (e) => this.onMessage(e);
+			this.__socket.onclose = (e) => this.onClose(e);
+			this.__socket.onerror = (e) => reject();
+		});
 	}
 
 	private onOpen(event: Event) {

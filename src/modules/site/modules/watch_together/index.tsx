@@ -65,11 +65,12 @@ class WatchTogether extends PageModule {
 				this.__logger.info('A room was created and is ready for use!', [room]);
 				this.__logger.info('Invite URL:', this.__api.getRoomURL());
 			}
-		}
+		} else if(this.isWatching && this.__api.room)
+			await this.update();
 	}
 
 	async update() {
-		if(!this.__api.room !== null) {
+		if(this.__api.room) {
 			if(this.__manager.getVideo() !== null) {
 				if(await this.__api.pingRoom()) {
 					if(this.__api.room.token) {
