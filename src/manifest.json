@@ -3,7 +3,7 @@
 	"name": "EnhancedNetflix",
 	"short_name": "EN",
 	"description": "A better way to watch.",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"author": "Adeithe",
 	"homepage_url": "https://adeithe.dev/netflix",
 	"icons": {
