@@ -15,6 +15,7 @@ export class PubSub {
 
 	private __api: API;
 	private __logger: Logger;
+	private __connecting_promise: Promise<void>;
 	private __socket: WebSocket;
 	private __topics: Topic[];
 	private __last_ping: number;
@@ -30,6 +31,7 @@ export class PubSub {
 	}
 
 	get topics(): string[] { return Array.from(this.__topics, o => o.topic); }
+	get isConnecting(): boolean { return this.__connecting_promise !== null; }
 	get isConnected(): boolean { return !!this.__socket && this.__socket.readyState == WebSocket.OPEN; }
 	get latency(): number { return Packets.default.PongPacket.ping; }
 
@@ -90,13 +92,15 @@ export class PubSub {
 	close() { if(this.isConnected) this.__socket.close(); }
 
 	connect(): Promise<void> {
-		return new Promise((resolve, reject) => {
+		if(this.__connecting_promise) return this.__connecting_promise;
+		this.__logger.info(`Attempting to open a connection with socket service!`);
+		return this.__connecting_promise = new Promise((resolve, reject) => {
 			this.__socket = new WebSocket(`wss://${PubSub.IP}`);
-			this.__api.once(":connect", () => resolve());
+			this.__api.once(":connect", () => { resolve(); this.__connecting_promise = null; });
 			this.__socket.onopen = (e) => this.onOpen(e);
 			this.__socket.onmessage = (e) => this.onMessage(e);
 			this.__socket.onclose = (e) => this.onClose(e);
-			this.__socket.onerror = (e) => reject();
+			this.__socket.onerror = (e) => { reject(); this.__connecting_promise = null; };
 		});
 	}
 
