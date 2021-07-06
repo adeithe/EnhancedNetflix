@@ -37,8 +37,8 @@ export class EnhancedNetflix extends Module {
 		this.getCoreLogger().info(`Found data for ${Object.keys(Modules.default).length} modules.`);
 
 		this.enable().then(() => this.enableInitialModules()).then(() => {
-			const duration = performance.now() - start_time;
-			this.getCoreLogger().info(`Initialization complete! (Took: ${Math.ceil(duration)}ms)`);
+			setInterval(() => this.emit(':loop'), 750);
+			this.getCoreLogger().info(`Initialization complete! (Took: ${Math.ceil(performance.now() - start_time)}ms)`);
 		}).catch(err => {
 			this.getCoreLogger().error('An error occurred while initializing.', err);
 		});

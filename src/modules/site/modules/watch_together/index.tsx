@@ -34,6 +34,15 @@ class WatchTogether extends PageModule {
 			this.isWatching = this.__location.path.startsWith('/watch');
 			this.handle(location);
 		});
+		Website.Instance.getCore().on(':loop', () => {
+			if(this.isWatching && !this.isUpdating) {
+				this.isUpdating = true;
+				setTimeout(() => {
+					this.isUpdating = false;
+					this.update();
+				}, (30000 - (Math.floor(Math.random() * 7500) + 1000)));
+			}
+		});
 		window.onbeforeunload = (e: BeforeUnloadEvent) => {
 			this.__api.leaveRoom();
 			return undefined;
@@ -74,25 +83,20 @@ class WatchTogether extends PageModule {
 			if(this.__manager.getVideo() !== null) {
 				if(await this.__api.pingRoom()) {
 					if(this.__api.room.token) {
-						await this.__api.updateRoom({
+						let body = {
 							title: this.__location.path.replace(/\/watch\//g, ''),
 							trackId: this.__location.args['trackId'] as string,
 							timeRemaining: this.__manager.getTimeRemaining(),
 							isPaused: (this.__manager.getState() !== PlayerState.PLAYING)
-						});
+						}
+						await this.__api.updateRoom(body);
+						this.__api.emit(':update-pushed', body);
 					} else {
 						if(this.__manager.getTitle() !== this.__api.room.title) {
 							window.location.href = this.__api.getRoomURL();
 							return;
 						} //else if(!this.isInitialized)
 							//new NetflixRoom(this.__api).handle(this.__api.room, [this.__api.room.roomId]);
-					}
-					if(!this.isUpdating) {
-						this.isUpdating = true;
-						setTimeout(() => {
-							this.isUpdating = false;
-							this.update();
-						}, (30000 - (Math.floor(Math.random() * 7500) + 1000)));
 					}
 					this.isInitialized = true;
 					return;
