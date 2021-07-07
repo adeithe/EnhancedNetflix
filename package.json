@@ -1,6 +1,6 @@
 {
   "name": "enhanced-netflix",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A better way to watch.",
   "main": "src/index.ts",
   "repository": "https://github.com/Adeithe/EnhancedNetflix",

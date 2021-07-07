@@ -101,7 +101,7 @@ export class API extends Module {
 		if(!this.__room) return false;
 		if(this.__room.token) {
 			const req = await this.call(`rooms/${this.__room.roomId}`, Method.DELETE);
-			if(req.status !== 200 && req.status !== 202 && req.status !== 204)
+			if(req.status !== 200 && req.status !== 202 && req.status !== 204 && req.status !== 404)
 				return false;
 		}
 		this.getPubSub().unlisten(`netflix-rooms.${this.__room.roomId}`);
