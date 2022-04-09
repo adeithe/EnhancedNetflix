@@ -11,7 +11,7 @@
     "webpack:build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --colors --progress --mode=production --hide-modules --quiet"
   },
   "dependencies": {
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-draggable": "^4.1.0",
